@@ -22,7 +22,7 @@ public class AdminService {
     public ResponseEntity<?> changeUserRole(AddRoleDTO addRoleDTO) {
         if (userRepository.findUserByUsername(addRoleDTO.getUsername()) == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if (addRoleDTO.getRole().equals("ADMINISTRATOR"))
+        if (!addRoleDTO.getRole().equals("MERCHANT") && !addRoleDTO.getRole().equals("SUPPORT"))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         User user = userRepository.findUserByUsername(addRoleDTO.getUsername());
         if (Objects.equals(user.getRole().getAuthority(), addRoleDTO.getRole()))
