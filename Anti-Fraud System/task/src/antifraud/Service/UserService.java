@@ -1,5 +1,6 @@
 package antifraud.Service;
 
+import antifraud.Entity.Role;
 import antifraud.Entity.User;
 import antifraud.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,19 @@ public class UserService {
         if (userRepository.findUserByUsername(user.getUsername()) != null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         else {
-            user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            if (userRepository.findUserByRole(Role.ADMINISTRATOR) == null) {
+                user.setPassword(encoder.encode(user.getPassword()));
+                user.setRole(Role.ADMINISTRATOR);
+                user.setAccountNonLocked(true);
+                userRepository.save(user);
+                return new ResponseEntity<>(user, HttpStatus.CREATED);
+            } else {
+                user.setPassword(encoder.encode(user.getPassword()));
+                user.setRole(Role.MERCHANT);
+                user.setAccountNonLocked(false);
+                userRepository.save(user);
+                return new ResponseEntity<>(user, HttpStatus.CREATED);
+            }
         }
     }
 
