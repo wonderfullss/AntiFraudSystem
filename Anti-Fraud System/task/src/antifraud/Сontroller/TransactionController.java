@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class TransactionController {
@@ -15,7 +17,7 @@ public class TransactionController {
     private final TransactService transactService;
 
     @PostMapping("/api/antifraud/transaction")
-    public ResponseEntity<?> postTransact(@RequestBody Transaction transaction) {
+    public ResponseEntity<?> postTransact(@RequestBody @Valid Transaction transaction) {
         return transactService.Transact(transaction);
     }
 }
