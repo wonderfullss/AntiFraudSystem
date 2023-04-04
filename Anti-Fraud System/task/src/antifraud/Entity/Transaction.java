@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +26,10 @@ public class Transaction {
 
     @Pattern(regexp = "^4[0-9]{12}(?:[0-9]{3})?$")
     private String number;
+
+
+    private String region;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 }
