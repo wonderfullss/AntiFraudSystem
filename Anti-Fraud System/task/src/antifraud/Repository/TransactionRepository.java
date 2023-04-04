@@ -14,5 +14,5 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
 
     List<Transaction> findAllByNumber(String number);
 
-    List<Transaction> findByDateBetween(Date prev, Date current);
+    List<Transaction> findAllByNumberAndDateBetween(String number, Date prev, Date current);
 }

@@ -35,7 +35,7 @@ public class TransactService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         transactionRepository.save(transaction);
         Date prevDate = new Date(transaction.getDate().getTime() - 3600_000L);
-        List<Transaction> byDateBetween = transactionRepository.findByDateBetween(prevDate, transaction.getDate());
+        List<Transaction> byDateBetween = transactionRepository.findAllByNumberAndDateBetween(transaction.getNumber(), prevDate, transaction.getDate());
         long countRegion = byDateBetween.stream().map(Transaction::getRegion).distinct().count();
         long countIp = byDateBetween.stream().map(Transaction::getIp).distinct().count();
         if (countRegion > 3 || countIp > 3 || ipRepository.findAllByIp(transaction.getIp()) != null || stolenCardRepository.findAllByNumber(transaction.getNumber()) != null)
