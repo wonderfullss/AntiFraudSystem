@@ -1,12 +1,14 @@
 package antifraud.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +19,7 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("transactionId")
     private Long id;
 
     private long amount;
@@ -30,6 +33,15 @@ public class Transaction {
 
     private String region;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private LocalDateTime date;
+
+    private String result;
+
+    @JsonIgnore
+    private String feedback;
+
+    @JsonProperty("feedback")
+    public String getFeedback() {
+        return feedback == null ? "" : feedback;
+    }
 }

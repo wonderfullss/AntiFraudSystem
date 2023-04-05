@@ -1,9 +1,11 @@
 package antifraud.Сontroller;
 
+import antifraud.Entity.FeedBackDTO;
 import antifraud.Entity.IpAddress;
 import antifraud.Entity.StolenCard;
 import antifraud.Service.CardService;
 import antifraud.Service.IpService;
+import antifraud.Service.TransactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,21 @@ public class SupportController {
 
     private final CardService cardService;
 
-    @PostMapping("/api/antifraud/suspicious-ip")
-    public ResponseEntity<?> addIp(@RequestBody @Valid IpAddress ipAddress) {
-        return ipService.addIpAddress(ipAddress);
+    private final TransactService transactService;
+
+    @PutMapping("/api/antifraud/transaction")
+    public ResponseEntity<?> updateFeedback(@RequestBody FeedBackDTO feedBackDTO) {
+        return transactService.updateFeedback(feedBackDTO);
+    }
+
+    @GetMapping("/api/antifraud/history")
+    public ResponseEntity<?> getTransact() {
+        return transactService.getAllTransaction();
+    }
+
+    @GetMapping("/api/antifraud/history/{number}")
+    public ResponseEntity<?> getTransactByCard(@PathVariable String number) {
+        return transactService.getAllTransactionByCardNumber(number);
     }
 
     @GetMapping("/api/antifraud/suspicious-ip")
@@ -28,9 +42,14 @@ public class SupportController {
         return ipService.getAllIpAddress();
     }
 
-    @DeleteMapping("/api/antifraud/suspicious-ip/{ip}")
-    public ResponseEntity<?> deleteIp(@PathVariable String ip) {
-        return ipService.deleteIpAddress(ip);
+    @GetMapping("/api/antifraud/stolencard")
+    public ResponseEntity<?> getCards() {
+        return cardService.getAllCard();
+    }
+
+    @PostMapping("/api/antifraud/suspicious-ip")
+    public ResponseEntity<?> addIp(@RequestBody @Valid IpAddress ipAddress) {
+        return ipService.addIpAddress(ipAddress);
     }
 
     @PostMapping("/api/antifraud/stolencard")
@@ -38,9 +57,9 @@ public class SupportController {
         return cardService.addCard(stolenCard);
     }
 
-    @GetMapping("/api/antifraud/stolencard")
-    public ResponseEntity<?> getCards() {
-        return cardService.getAllCard();
+    @DeleteMapping("/api/antifraud/suspicious-ip/{ip}")
+    public ResponseEntity<?> deleteIp(@PathVariable String ip) {
+        return ipService.deleteIpAddress(ip);
     }
 
     @DeleteMapping("/api/antifraud/stolencard/{number}")
